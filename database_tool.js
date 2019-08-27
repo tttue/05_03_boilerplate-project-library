@@ -1,6 +1,7 @@
 /*
  Promise.all()
  */
+const promiseForeach = require('promise-foreach')
 const path = require('path');
 const dotenv = require('dotenv');
 dotenv.config({ path: path.resolve(process.cwd(), 'private.env') });
@@ -45,6 +46,35 @@ const addBook = (title, done) => {
 };
 
 const findAllBook = (done) => {
+	Book.find((err, data) => {
+		if (err) {
+			done(err)
+		} else {
+			// Clone data
+			var ret = []
+			for (var elm of data) {
+				ret.push({
+					_id: elm._id,
+					title: elm.title
+				});
+			}
+			promiseForeach.each(ret,(elm)=>{
+				return Comment.countDocuments({ bookId: elm._id });
+			},
+			(arrResult, elm)=>{
+				elm.commentcount = arrResult[0]
+				return elm;
+			},
+			(err,newList)=>{
+				done(null, { errorCode: 0, data: newList });
+
+			});
+		}
+	});
+};
+
+
+const findAllBookPromiseAll = (done) => {
 	Book.find((err, data) => {
 		if (err) {
 			done(err)

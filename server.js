@@ -13,6 +13,7 @@
 	npm ln mongoose
 	npm ln path
 	npm ln zombie
+	npm ln promise-foreach
 */
 
 var express     = require('express');
