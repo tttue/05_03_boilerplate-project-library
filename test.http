@@ -1,0 +1,14 @@
+@link = http://localhost:3000
+###
+POST {{link}}/api/books
+Accept:  */*
+Content-Type: application/x-www-form-urlencoded
+
+title=test1
+###
+GET {{link}}/api/books
+Accept:  */*
+
+###
+DELETE {{link}}/api/books
+Accept:  */*
