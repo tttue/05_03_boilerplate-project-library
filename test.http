@@ -1,14 +1,31 @@
 @link = http://localhost:3000
-###
+### Add one book
 POST {{link}}/api/books
 Accept:  */*
 Content-Type: application/x-www-form-urlencoded
 
 title=test1
-###
+
+### Get all book
 GET {{link}}/api/books
 Accept:  */*
 
 ###
+GET {{link}}/api/books/5d64db700c51ae54100d6d8f
+Accept:  */*
+
+### Post comment
+POST {{link}}/api/books/5d64db700c51ae54100d6d8f
+Accept:  */*
+Content-Type: application/x-www-form-urlencoded
+
+comment=comment thu n+1
+
+### Delete one book
+DELETE {{link}}/api/books/5d661ccaa5f50203bc014b6e
+Accept:  */*
+
+
+### Delete all book
 DELETE {{link}}/api/books
 Accept:  */*
