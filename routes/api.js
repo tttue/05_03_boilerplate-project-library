@@ -16,15 +16,15 @@ function processResult(res, next, err, info) {
 	if (err) {
 		next(err)
 	} else {
-		console.log("Process", info);
-		if (info.errorCode == 0) {
+		//console.log("Process", info);
+		if (info.errorCode === 0) {
 			if (info.data){
 				res.json(info.data);
 			} else {
-				res.json(info.message);
+				res.send(info.message);
 			}
 		} else {
-			res.send(info.errorMsg);
+			res.send(""+info.errorMsg);
 		}
 	}
 }

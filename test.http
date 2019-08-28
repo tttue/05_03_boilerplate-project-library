@@ -4,7 +4,7 @@ POST {{link}}/api/books
 Accept:  */*
 Content-Type: application/x-www-form-urlencoded
 
-title=test1
+#title=test1
 
 ### Get all book
 GET {{link}}/api/books
