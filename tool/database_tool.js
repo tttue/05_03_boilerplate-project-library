@@ -28,11 +28,13 @@ const Comment = mongoose.model('Comment', commentSchema);
 
 
 const addBook = (title, done) => {
-	var checkResult = tool.checkStringNotBlank(title, "title", true);
-	if (checkResult) {
-		done(null, { errorCode: -2, errorMsg: checkResult });
-		return;
+	let checkParamList = [
+		{ param: title, checkFunc: tool.checkStringNotBlank, paramName: "title" }
+	]
+	if (!tool.checkParams(checkParamList, done)) {
+		return
 	}
+
 	let objBook = {
 		title: title
 	}
@@ -122,10 +124,11 @@ const deleteAllBook = (done) => {
 
 
 const findOneBook = (_id, done) => {
-	var checkResult = tool.checkId(_id, "_id", true);
-	if (checkResult) {
-		done(null, { errorCode: -2, errorMsg: checkResult });
-		return;
+	let checkParamList = [
+		{ param: _id, checkFunc: tool.checkId, paramName: "_id" }
+	]
+	if (!tool.checkParams(checkParamList, done)) {
+		return
 	}
 
 	Book.findOne({ _id: _id }, (err, data) => {
@@ -153,16 +156,14 @@ const findOneBook = (_id, done) => {
 };
 
 const addComment = (_id, commentS, done) => {
-	var checkResult = tool.checkId(_id, "_id", true);
-	if (checkResult) {
-		done(null, { errorCode: -2, errorMsg: checkResult });
-		return;
+	let checkParamList = [
+		{ param: _id, checkFunc: tool.checkId, paramName: "_id" },
+		{ param: commentS, checkFunc: tool.checkStringNotBlank, paramName: "comment" }
+	]
+	if (!tool.checkParams(checkParamList, done)) {
+		return
 	}
-	var checkResult = tool.checkStringNotBlank(commentS, "comment", true);
-	if (checkResult) {
-		done(null, { errorCode: -2, errorMsg: checkResult });
-		return;
-	}
+
 	Book.findOne({ _id: _id }, (err, data) => {
 		if (err) {
 			done(err);
@@ -188,10 +189,11 @@ const addComment = (_id, commentS, done) => {
 }
 
 const deleteBook = (_id, done) => {
-	var checkResult = tool.checkId(_id, "_id", true);
-	if (checkResult) {
-		done(null, { errorCode: -2, errorMsg: checkResult });
-		return;
+	let checkParamList = [
+		{ param: _id, checkFunc: tool.checkId, paramName: "_id" }
+	]
+	if (!tool.checkParams(checkParamList, done)) {
+		return
 	}
 
 	Comment.deleteMany({ bookId: _id }, (err) => {

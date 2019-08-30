@@ -61,7 +61,60 @@ function checkId(id, name="Param", isNotBlank = false){
 	return null;
 }
 
+function isEmpty(obj) {
+	for(var key in obj) {
+			if(obj.hasOwnProperty(key))
+					return false;
+	}
+	return true;
+}
+
+function apiProcessResult(res, next, err, info) {
+	if (err) {
+		next(err);
+	} else {
+		if(process.env.NODE_ENV==='test') {
+			writeOutputToConsole(err, info)
+		}
+		//console.log("Process", info);
+		if (info.errorCode === 0) {
+			if (info.data){
+				res.json(info.data);
+			} else {
+				res.send(info.message);
+			}
+		} else {
+			res.send(""+info.errorMsg);
+		}
+	}
+}
+
+const writeOutputToConsole = (err, data) => {
+	if (err) {
+		console.log("Error:", err);
+		return;
+	}
+	console.log("Data: ", JSON.stringify(data));
+}
+
+const checkParams = (paramList, done) =>{
+	for (let elm of paramList) {
+		var checkResult =
+			elm.hasOwnProperty("isNotBlank") ?
+				elm.checkFunc(elm.param, elm.paramName, elm.isNotBlank) :
+				elm.checkFunc(elm.param, elm.paramName);
+		if (checkResult) {
+			done(null, { errorCode: -1, errorMsg: checkResult });
+			return false;
+		}
+	}
+	return true;
+}
 exports.checkStringNotBlank = checkStringNotBlank;
 exports.checkDate = checkDate;
 exports.checkNumber = checkNumber;
 exports.checkId = checkId;
+exports.isEmpty = isEmpty;
+exports.apiProcessResult=apiProcessResult;
+exports.writeOutputToConsole=writeOutputToConsole;
+exports.checkParams=checkParams;

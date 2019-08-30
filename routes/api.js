@@ -9,25 +9,10 @@
 'use strict';
 
 const expect = require('chai').expect;
-const database_tool = require("../database_tool");
+const database_tool = require("../tool/database_tool");
+const tool = require("../tool/tool");
 const timeout = 10000;
 
-function processResult(res, next, err, info) {
-	if (err) {
-		next(err)
-	} else {
-		//console.log("Process", info);
-		if (info.errorCode === 0) {
-			if (info.data){
-				res.json(info.data);
-			} else {
-				res.send(info.message);
-			}
-		} else {
-			res.send(""+info.errorMsg);
-		}
-	}
-}
 module.exports = function (app) {
 
 	app.route('/api/books')
@@ -37,7 +22,7 @@ module.exports = function (app) {
 			var t = setTimeout(() => { next({ message: 'timeout' }) }, timeout);
 			database_tool.findAllBook((err, info) => {
 				clearTimeout(t);
-				processResult(res, next, err, info);
+				tool.apiProcessResult(res, next, err, info);
 			});
 		})
 
@@ -46,7 +31,7 @@ module.exports = function (app) {
 			var t = setTimeout(() => { next({ message: 'timeout' }) }, timeout);
 			database_tool.addBook(title, (err, info) => {
 				clearTimeout(t);
-				processResult(res, next, err, info);
+				tool.apiProcessResult(res, next, err, info);
 			});
 		})
 
@@ -55,7 +40,7 @@ module.exports = function (app) {
 			var t = setTimeout(() => { next({ message: 'timeout' }) }, timeout);
 			database_tool.deleteAllBook((err, info) => {
 				clearTimeout(t);
-				processResult(res, next, err, info);
+				tool.apiProcessResult(res, next, err, info);
 			});
 		});
 
@@ -68,7 +53,7 @@ module.exports = function (app) {
 			var t = setTimeout(() => { next({ message: 'timeout' }) }, timeout);
 			database_tool.findOneBook(bookid, (err, info) => {
 				clearTimeout(t);
-				processResult(res, next, err, info);
+				tool.apiProcessResult(res, next, err, info);
 			});
 		})
 
@@ -79,7 +64,7 @@ module.exports = function (app) {
 			var t = setTimeout(() => { next({ message: 'timeout' }) }, timeout);
 			database_tool.addComment(bookid, comment, (err, info) => {
 				clearTimeout(t);
-				processResult(res, next, err, info);
+				tool.apiProcessResult(res, next, err, info);
 			});
 		})
 
@@ -89,7 +74,7 @@ module.exports = function (app) {
 			var t = setTimeout(() => { next({ message: 'timeout' }) }, timeout);
 			database_tool.deleteBook(bookid, (err, info) => {
 				clearTimeout(t);
-				processResult(res, next, err, info);
+				tool.apiProcessResult(res, next, err, info);
 			});
 		});
 
