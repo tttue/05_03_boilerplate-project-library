@@ -1,5 +1,6 @@
 /*
  Promise.all()
+ promiseForeach
  */
 const promiseForeach = require('promise-foreach')
 const path = require('path');
@@ -7,17 +8,18 @@ const dotenv = require('dotenv');
 dotenv.config({ path: path.resolve(process.cwd(), 'private.env') });
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+mongoose.set('useCreateIndex', true);
 const tool = require("./tool")
 
 const bookSchema = new mongoose.Schema({
-	title: String
+	title: { type: String, index: true }
 });
 bookSchema.index({ title: 1 });
 
 const Book = mongoose.model('Book', bookSchema);
 
 const commentSchema = new mongoose.Schema({
-	bookId: String,
+	bookId: { type: String, index: true },
 	comment: String
 });
 commentSchema.index({ bookId: 1 });
